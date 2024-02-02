@@ -112,7 +112,7 @@ set(alure_srcs src/devicemanager.cpp
                src/auxeffectslot.cpp
                src/effect.cpp
 )
-set(alure_libs ${OPENAL_LIBRARY})
+set(alure_libs OpenAL)
 set(decoder_incls )
 
 unset(HAVE_WAVE)
