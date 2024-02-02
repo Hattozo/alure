@@ -197,7 +197,7 @@ if(ALURE_BUILD_SHARED)
                                                   NOMINMAX)
     endif()
     target_include_directories(alure2
-        PUBLIC $<BUILD_INTERFACE:${alure_SOURCE_DIR}/include/AL> ${OPENAL_INCLUDE_DIR}
+        PUBLIC $<BUILD_INTERFACE:${alure_SOURCE_DIR}/include/AL> ${LIBRARIES}/openal-soft/include
         PRIVATE ${alure_SOURCE_DIR}/include ${alure_SOURCE_DIR}/src ${alure_BINARY_DIR}
                 ${decoder_incls}
     )
@@ -214,7 +214,7 @@ if(ALURE_BUILD_STATIC)
     add_library(alure2_s STATIC ${alure_srcs})
     target_compile_definitions(alure2_s PUBLIC ALURE_STATIC_LIB PRIVATE NOMINMAX)
     target_include_directories(alure2_s
-        PUBLIC $<BUILD_INTERFACE:${alure_SOURCE_DIR}/include/AL> ${OPENAL_INCLUDE_DIR}
+        PUBLIC $<BUILD_INTERFACE:${alure_SOURCE_DIR}/include/AL> ${LIBRARIES}/openal-soft/include
         PRIVATE ${alure_SOURCE_DIR}/include ${alure_SOURCE_DIR}/src ${alure_BINARY_DIR}
                 ${decoder_incls}
     )
