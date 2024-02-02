@@ -15,7 +15,6 @@ include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
 include(GNUInstallDirs)
 
-find_package(OpenAL REQUIRED)
 find_package(Threads)
 
 # Require C++14
