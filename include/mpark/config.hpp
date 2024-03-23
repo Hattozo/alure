@@ -13,6 +13,10 @@
 #error "MPark.Variant requires C++11 support."
 #endif
 
+#ifndef __has_attribute
+#define __has_attribute(x) 0
+#endif
+
 #ifndef __has_builtin
 #define __has_builtin(x) 0
 #endif
@@ -25,17 +29,34 @@
 #define __has_feature(x) 0
 #endif
 
+#if __has_attribute(always_inline) || defined(__GNUC__)
+#define MPARK_ALWAYS_INLINE __attribute__((__always_inline__)) inline
+#elif defined(_MSC_VER)
+#define MPARK_ALWAYS_INLINE __forceinline
+#else
+#define MPARK_ALWAYS_INLINE inline
+#endif
+
 #if __has_builtin(__builtin_addressof) || \
     (defined(__GNUC__) && __GNUC__ >= 7) || defined(_MSC_VER)
 #define MPARK_BUILTIN_ADDRESSOF
 #endif
 
-#if __has_builtin(__builtin_unreachable)
+#if __has_builtin(__builtin_unreachable) || defined(__GNUC__)
+#define MPARK_BUILTIN_UNREACHABLE __builtin_unreachable()
+#elif defined(_MSC_VER)
+#define MPARK_BUILTIN_UNREACHABLE __assume(false)
+#else
 #define MPARK_BUILTIN_UNREACHABLE
 #endif
 
-#if __has_builtin(__type_pack_element)
+#if __has_builtin(__type_pack_element) && !(defined(__ICC))
 #define MPARK_TYPE_PACK_ELEMENT
+#endif
+
+#if defined(__cpp_constexpr) && __cpp_constexpr >= 200704 && \
+    !(defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 9)
+#define MPARK_CPP11_CONSTEXPR
 #endif
 
 #if defined(__cpp_constexpr) && __cpp_constexpr >= 201304
@@ -43,7 +64,8 @@
 #endif
 
 #if __has_feature(cxx_exceptions) || defined(__cpp_exceptions) || \
-    (defined(_MSC_VER) && defined(_CPPUNWIND))
+    (defined(_MSC_VER) && defined(_CPPUNWIND)) || \
+    defined(__EXCEPTIONS)
 #define MPARK_EXCEPTIONS
 #endif
 
@@ -55,7 +77,7 @@
 #define MPARK_INTEGER_SEQUENCE
 #endif
 
-#if defined(__cpp_return_type_deduction) || defined(_MSC_VER)
+#if (defined(__cpp_decltype_auto) && defined(__cpp_return_type_deduction)) || defined(_MSC_VER)
 #define MPARK_RETURN_TYPE_DEDUCTION
 #endif
 
@@ -69,6 +91,7 @@
 
 #if !defined(__GLIBCXX__) || __has_include(<codecvt>)  // >= libstdc++-5
 #define MPARK_TRIVIALITY_TYPE_TRAITS
+#define MPARK_INCOMPLETE_TYPE_TRAITS
 #endif
 
 #endif  // MPARK_CONFIG_HPP
